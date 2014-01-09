@@ -94,6 +94,7 @@ def convert_duration_to_bins(duration_days, nbins, per, duration_type):
 ############################################################################################
 ## This is the main routine.
 ############################################################################################
+@profile
 def main():
     ## Define input options.
     from optparse import OptionParser
@@ -116,7 +117,7 @@ def main():
     direction = opts.direction
 
     ## Read in the KIC ID, Quarter, and lightcurve data from standard input.
-    input_data = read_mapper_output(sys.stdin)
+    input_data = read_mapper_output(open("bench_2_joined.dat"))
 
     ## Peel out the Kepler ID, Quarters, and lightcurve from the input_data for use.
     ## Note:  The lightcurve is stored as a List of Lists comprised of [time, flux, flux_error].
@@ -228,7 +229,7 @@ def main():
             print "\n"
 
 if __name__ == "__main__":
-    logging.basicConfig(level=logging.INFO)
-    logger.setLevel(logging.INFO)
+    logging.basicConfig(level=logging.WARNING)
+    logger.setLevel(logging.WARNING)
     main()
 ############################################################################################

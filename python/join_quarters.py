@@ -24,7 +24,7 @@ def encode_list(flux_list):
 
 def main(separator='\t'):
     # input comes from STDIN (standard input)
-    data = read_mapper_output(sys.stdin, separator=separator)
+    data = read_mapper_output(open("bench_3_download.dat"), separator=separator)
     # groupby groups multiple quarters together for each Kepler ID
     #   current_kic is current Kepler ID
     #   group - iterator yielding all ["&lt;current_word&gt;", "&lt;count&gt;"] items
