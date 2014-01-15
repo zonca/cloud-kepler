@@ -8,7 +8,8 @@
 ## Place import commands and logging options.
 ############################################################################################
 import numpy
-import simplejson
+#import simplejson
+import json as simplejson
 from zlib import decompress, compress
 import base64
 import logging
@@ -191,21 +192,66 @@ def main():
             transitMidTime = numpy.append(transitMidTime, numpy.nan)
             transitDepth   = numpy.append(transitDepth  , numpy.nan)
             # determine srMax
+
+# RSS - 3rd modified version of time-intensive code block
+#
+# --- From version 1
+#
+# (1) Create arrays rcum and scum to store cumulative sums
+#
+# (2) Calculate rcum and scum before entering inner loop
+#
+# (3) Set lower bound for inner loop to i1+mindur+1 and eliminate test
+#     "i2 - i1 > mindur"
+#
+# (4) Use elements of rcum and scum instead of old variables r and s
+#
+# --- From version 2
+#
+# (5) After calculating cumulative sum rcum, test the last element of
+#     rcum to see if it is less than r_min. Since the elements of ppb
+#     are all greater than or equal to zero, element rcum[-1] will
+#     have the maximal value for the array. Passing this test means
+#     that the no element of rcum will be pass the test and further
+#     calculations for this value of i1 can be avoided.
+#
+# --- From version 3
+#
+# (6) Implement strategy to take further advantage of the fact that
+#     the elements of the array rcum are monotonically
+#     increasing. 
+#
+#     (a) Reverse order of iterations for inner loop, noting that
+#     range(x,y) = sorted(range(y-1,x-1,-1)
+#
+#     (b) Add code inside inner loop to break once the first element
+#     of rcum is found that is less than r_min
+#
+#     (c) Change test "sr > srMax[-1]" to "sr >= srMax[-1]". This
+#     allows consistency with earlier version of code when multiple
+#     consecutive values of sr are all infinity.
+
             for i1 in range(nbins):
-                s = 0
-                r = 0
-                for i2 in range(i1, min(i1 + maxdur + 1,nbins)):
-                    s += binFlx[i2]
-                    r += ppb[i2]
-                    if i2 - i1 > mindur and r >= r_min and direction*s >= 0:
-                        sr = 1 * (s**2 / (r * (n - r)))
-                        if sr > srMax[-1] or numpy.isnan(srMax[-1]):
+                tmp1 = ppb[i1 : min(i1 + maxdur + 1,nbins)]
+                rcum = numpy.cumsum(tmp1)
+                if (rcum[-1] < r_min):
+                    continue
+                tmp2 = binFlx[i1 : min(i1 + maxdur + 1,nbins)]
+                scum = numpy.cumsum(tmp2)
+                for i2 in range(min(i1 + maxdur + 1,nbins)-1, i1+mindur, -1):
+                    if rcum[i2-i1] < r_min:
+                        break
+                    if direction*scum[i2-i1] >= 0:
+                        sr = 1 * (scum[i2-i1]**2 / (rcum[i2-i1] * (n - rcum[i2-i1])))
+                        if sr >= srMax[-1] or numpy.isnan(srMax[-1]): # Note ">=" instead of ">"
                             srMax[-1] = sr
                             transitDuration[-1] = i2 - i1 + 1
                             transitPhase[-1] = i1
                             transitPhase[-1] = i1
-                            transitDepth[-1] = -s*n/(r*(n-r))
+                            transitDepth[-1] = -scum[i2-i1]*n/(rcum[i2-i1]*(n-rcum[i2-i1]))
                             transitMidTime[-1] = segs[0] + 0.5*(i1+i2)*trial_period/nbins
+
+
         # format output
         srMax = srMax**.5
         
