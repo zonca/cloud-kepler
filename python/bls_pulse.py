@@ -94,7 +94,7 @@ def convert_duration_to_bins(duration_days, nbins, per, duration_type):
 ############################################################################################
 ## This is the main routine.
 ############################################################################################
-@profile
+#@profile
 def main():
     ## Define input options.
     from optparse import OptionParser
@@ -209,6 +209,7 @@ def main():
                             transitMidTime[-1] = segs[0] + 0.5*(i1+i2)*trial_period/nbins
         # format output
         srMax = srMax**.5
+        return srMax
         
         # Print output.
         if opts.print_format == 'encoded':
@@ -231,5 +232,5 @@ def main():
 if __name__ == "__main__":
     logging.basicConfig(level=logging.WARNING)
     logger.setLevel(logging.WARNING)
-    main()
+    srMax = main()
 ############################################################################################
