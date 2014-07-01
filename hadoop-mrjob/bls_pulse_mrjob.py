@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/home/zonca/py/bin/python
 from mrjob.job import MRJob
 import mrjob.protocol
 import re
@@ -15,9 +15,9 @@ using mrjob only for setting up Hadoop"""
 
     def steps(self):
         return [
-            self.mr(mapper_cmd=FOLDER + "download.py",
-                    reducer_cmd=FOLDER + "join_quarters.py"),
-            self.mr(reducer_cmd=FOLDER + "bls_pulse_vec_interface.py --mindur .01 --maxdur 2.0 --nbins 100 --segment 2.5 --direction -1 --printformat 'normal'")
+            self.mr(mapper_cmd="/home/zonca/py/bin/python " + FOLDER + "download.py",
+                    reducer_cmd="/home/zonca/py/bin/python " + FOLDER + "join_quarters.py"),
+            self.mr(reducer_cmd="/home/zonca/py/bin/python " + FOLDER + "bls_pulse_vec_interface.py --mindur .01 --maxdur 2.0 --nbins 100 --segment 2.5 --direction -1 --printformat 'normal'")
         ]
 
 if __name__ == '__main__':
