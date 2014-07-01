@@ -132,7 +132,7 @@ def main(separator="\t"):
             # Download the requested URL.
             #fits_stream = download_file_serialize(path, kepler_id, path_backup)
             # load locally
-            fits_stream = open("../../data/kplr"+kepler_id+"-"+QUARTER_PREFIXES[quarter_key]+"_llc.fits", "rb").read()
+            fits_stream = open("/oasis/scratch/zonca/temp_project/MAST/data/kplr"+kepler_id+"-"+QUARTER_PREFIXES[quarter_key]+"_llc.fits", "rb").read()
             tempfile, fits_array_string = process_fits_object(fits_stream)
             # Write the result to STDOUT as this will be an input to a
             # reducer that aggregates the querters together
