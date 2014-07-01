@@ -3,22 +3,8 @@ Run cloud-kepler on Gordon
 
 ## Setup Python environment on Gordon
 
-Edit your `.bashrc` and add the commands to load the default Python and scipy environment:
-
-```bash
-module load python
-module load scipy
-```
-
-Then download and untar `virtualenv` from <https://pypi.python.org/pypi/virtualenv> to create a sandboxed environment:
-
-    mkdir ~/venv
-    python virtualenv-*/virtualenv.py ~/venv/py
-    source ~/venv/py/bin/activate # add this to .bashrc to load it at every login
-
-Install the required packages in your environment:
-
-    pip install pandas mrjob
+No need to setup Python environment on Gordon,
+all the scripts are setup to use a standard Python environment available in `/home/zonca/py`
 
 ## Launch a Hadoop job
 
