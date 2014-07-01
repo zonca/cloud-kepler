@@ -1,0 +1,1 @@
+cat ../python/kep_4_13_14_15.txt | ../python/download.py | ../python/join_quarters.py | ../python/bls_pulse_vec_interface.py --mindur .01 --maxdur 2.0 --nbins 100 --segment 2.5 --direction -1 --printformat 'normal' > manual_test_output
