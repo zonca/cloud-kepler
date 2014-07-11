@@ -3,8 +3,17 @@ Run cloud-kepler on Gordon
 
 ## Setup Python environment on Gordon
 
-No need to setup Python environment on Gordon,
+Add:
+
+    module load python scipy
+
+to your `.bashrc`.
+
 all the scripts are setup to use a standard Python environment available in `/home/zonca/py`
+in order to launch the python environment in the login node,
+run:
+
+    source /home/zonca/py/bin/activate
 
 ## Launch a Hadoop job
 
